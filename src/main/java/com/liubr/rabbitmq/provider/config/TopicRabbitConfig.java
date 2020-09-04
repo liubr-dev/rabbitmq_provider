@@ -24,6 +24,7 @@ public class TopicRabbitConfig {
      */
     public static final String man = "topic.man";
     public static final String woman = "topic.woman";
+    public static final String all = "topic.all";
 
     @Bean
     public Queue firstQueue() {
@@ -36,6 +37,11 @@ public class TopicRabbitConfig {
     }
 
     @Bean
+    public Queue thirdQueue() {
+        return new Queue(TopicRabbitConfig.all);
+    }
+
+    @Bean
     TopicExchange topicExchange() {
         return new TopicExchange("topicExchange");
     }
@@ -45,8 +51,13 @@ public class TopicRabbitConfig {
      * 这样只要是消息携带的路由键是topic.man,才会分发到该队列
      */
     @Bean
-    Binding bindingExchangeMessage() {
-        return BindingBuilder.bind(firstQueue()).to(topicExchange()).with(man);
+    Binding bindingExchangeMessage1() {
+        return BindingBuilder.bind(firstQueue()).to(topicExchange()).with("topic.man");
+    }
+
+    @Bean
+    Binding bindingExchangeMessage2() {
+        return BindingBuilder.bind(secendQueue()).to(topicExchange()).with("topic.woman");
     }
 
     /**
@@ -54,8 +65,8 @@ public class TopicRabbitConfig {
      * 这样只要是消息携带的路由键是以topic.开头,都会分发到该队列
      */
     @Bean
-    Binding bindingExchangeMessage2() {
-        return BindingBuilder.bind(secendQueue()).to(topicExchange()).with("topic.#");
+    Binding bindingExchangeMessage3() {
+        return BindingBuilder.bind(thirdQueue()).to(topicExchange()).with("topic.#");
     }
 
 }

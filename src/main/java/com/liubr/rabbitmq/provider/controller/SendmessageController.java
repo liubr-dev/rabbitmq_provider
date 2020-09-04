@@ -43,7 +43,7 @@ public class SendmessageController {
     @GetMapping("/sendTopicMessage1")
     public String sendTopicMessage1() {
         String messageId = String.valueOf(UUID.randomUUID());
-        String messageData = "Message: M A N";
+        String messageData = "Message: man";
         String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         Map map = putMap(messageId, messageData, createTime);
         rabbitTemplate.convertAndSend("topicExchange", "topic.man", map);
@@ -53,10 +53,20 @@ public class SendmessageController {
     @GetMapping("/sendTopicMessage2")
     public String sendTopicMessage2() {
         String messageId = String.valueOf(UUID.randomUUID());
-        String messageData = "Message: W O M A N";
+        String messageData = "Message: woman";
         String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         Map map = putMap(messageId, messageData, createTime);
         rabbitTemplate.convertAndSend("topicExchange", "topic.woman", map);
+        return "OK";
+    }
+
+    @GetMapping("/sendTopicMessage3")
+    public String sendTopicMessage3() {
+        String messageId = String.valueOf(UUID.randomUUID());
+        String messageData = "Message: ALL";
+        String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Map map = putMap(messageId, messageData, createTime);
+        rabbitTemplate.convertAndSend("topicExchange", "topic.#", map);
         return "OK";
     }
 
